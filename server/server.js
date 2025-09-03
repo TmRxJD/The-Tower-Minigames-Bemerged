@@ -1,13 +1,21 @@
 import express from "express";
 import dotenv from "dotenv";
 import fetch from "node-fetch";
+import path from "path";
+import { fileURLToPath } from "url";
 dotenv.config({ path: "../.env" });
 
 const app = express();
-const port = 3001;
+const port = process.env.PORT || 3001;
 
 // Allow express to parse JSON bodies
 app.use(express.json());
+
+// Serve static files from the parent directory (the getting-started-activity folder)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const rootStatic = path.join(__dirname, '..');
+app.use(express.static(rootStatic));
 
 app.post("/api/token", async (req, res) => {
   
@@ -33,5 +41,5 @@ app.post("/api/token", async (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server listening at http://localhost:${port}`);
+  console.log(`Server listening at http://localhost:${port} serving static from ${rootStatic}`);
 });

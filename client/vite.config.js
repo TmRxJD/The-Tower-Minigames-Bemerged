@@ -15,5 +15,11 @@ export default defineConfig({
     hmr: {
       clientPort: 443,
     },
+      allowedHosts: [
+        "localhost",
+        "127.0.0.1",
+        "306dbfbc872d.ngrok-free.app", // new ngrok domain
+        "clicking-therapeutic-ultimately-endorsed.trycloudflare.com",
+      ],
   },
 });

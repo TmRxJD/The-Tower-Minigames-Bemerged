@@ -4,10 +4,150 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hello, World</title>
+    <title>Bemerged</title>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+      <div id="merge-chart-wrap">
+        <img src="/merge_chart.png" class="logo" alt="Merge Chart" />
+      </div>
+      <div class="bejeweled-container">
+        <h1>Bemerged</h1>
+  <div id="score"></div>
+        <div id="game-board"></div>
+        <div id="message"></div>
+      </div>
+    </div>
+    <!-- Preload module assets (hidden) -->
+    <div id="asset-preload" style="display:none;">
+      <img src="/assets/modules_generator/rare_sl.png" alt=""/>
+      <img src="/assets/modules_generator/rare_sds.png" alt=""/>
+      <img src="/assets/modules_generator/rare_os.png" alt=""/>
+      <img src="/assets/modules_generator/rare_ar.png" alt=""/>
+      <img src="/assets/modules_generator/mf_rare_plus.png" alt=""/>
+      <img src="/assets/modules_generator/mf_rare.png" alt=""/>
+      <img src="/assets/modules_generator/mf_mythic_plus.png" alt=""/>
+      <img src="/assets/modules_generator/mf_mythic.png" alt=""/>
+      <img src="/assets/modules_generator/mf_legendary_plus.png" alt=""/>
+      <img src="/assets/modules_generator/mf_legendary.png" alt=""/>
+      <img src="/assets/modules_generator/mf_epic_plus.png" alt=""/>
+      <img src="/assets/modules_generator/mf_epic.png" alt=""/>
+      <img src="/assets/modules_generator/mf_empty.png" alt=""/>
+      <img src="/assets/modules_generator/mf_common.png" alt=""/>
+      <img src="/assets/modules_generator/mf_ancestral.png" alt=""/>
+      <img src="/assets/modules_generator/generator_type.png" alt=""/>
+      <img src="/assets/modules_generator/epic_sh.png" alt=""/>
+      <img src="/assets/modules_generator/epic_ph.png" alt=""/>
+      <img src="/assets/modules_generator/epic_gc.png" alt=""/>
+      <img src="/assets/modules_generator/epic_bhd.png" alt=""/>
+      <img src="/assets/modules_generator/common_mc.png" alt=""/>
+      <img src="/assets/modules_generator/common_ec.png" alt=""/>
+
+      <img src="/assets/modules_core/type.png" alt=""/>
+      <img src="/assets/modules_core/rare_ms.png" alt=""/>
+      <img src="/assets/modules_core/rare_gl.png" alt=""/>
+      <img src="/assets/modules_core/rare_em.png" alt=""/>
+      <img src="/assets/modules_core/rare_cs.png" alt=""/>
+      <img src="/assets/modules_core/mf_rare_plus.png" alt=""/>
+      <img src="/assets/modules_core/mf_rare.png" alt=""/>
+      <img src="/assets/modules_core/mf_mythic_plus.png" alt=""/>
+      <img src="/assets/modules_core/mf_mythic.png" alt=""/>
+      <img src="/assets/modules_core/mf_legendary_plus.png" alt=""/>
+      <img src="/assets/modules_core/mf_legendary.png" alt=""/>
+      <img src="/assets/modules_core/mf_epic_plus.png" alt=""/>
+      <img src="/assets/modules_core/mf_epic.png" alt=""/>
+      <img src="/assets/modules_core/mf_empty.png" alt=""/>
+      <img src="/assets/modules_core/mf_common.png" alt=""/>
+      <img src="/assets/modules_core/mf_ancestral.png" alt=""/>
+      <img src="/assets/modules_core/epic_oc.png" alt=""/>
+      <img src="/assets/modules_core/epic_mvn.png" alt=""/>
+      <img src="/assets/modules_core/epic_hc.png" alt=""/>
+      <img src="/assets/modules_core/epic_dc.png" alt=""/>
+      <img src="/assets/modules_core/common_mc.png" alt=""/>
+      <img src="/assets/modules_core/common_ec.png" alt=""/>
+
+      <img src="/assets/modules_armor/rare_pc.png" alt=""/>
+      <img src="/assets/modules_armor/rare_ni.png" alt=""/>
+      <img src="/assets/modules_armor/rare_dn.png" alt=""/>
+      <img src="/assets/modules_cannon/mf_rare_plus.png" alt=""/>
+      <img src="/assets/modules_armor/mf_rare_plus.png" alt=""/>
+      <img src="/assets/modules_cannon/mf_rare.png" alt=""/>
+      <img src="/assets/modules_armor/mf_rare.png" alt=""/>
+      <img src="/assets/modules_cannon/mf_mythic_plus.png" alt=""/>
+      <img src="/assets/modules_armor/mf_mythic_plus.png" alt=""/>
+      <img src="/assets/modules_cannon/mf_mythic.png" alt=""/>
+      <img src="/assets/modules_armor/mf_mythic.png" alt=""/>
+      <img src="/assets/modules_cannon/mf_legendary_plus.png" alt=""/>
+      <img src="/assets/modules_armor/mf_legendary_plus.png" alt=""/>
+      <img src="/assets/modules_cannon/mf_legendary.png" alt=""/>
+      <img src="/assets/modules_armor/mf_legendary.png" alt=""/>
+      <img src="/assets/modules_armor/rare_sr.png" alt=""/>
+      <img src="/assets/modules_cannon/mf_epic_plus.png" alt=""/>
+      <img src="/assets/modules_armor/mf_epic_plus.png" alt=""/>
+      <img src="/assets/modules_cannon/mf_epic.png" alt=""/>
+      <img src="/assets/modules_armor/mf_epic.png" alt=""/>
+      <img src="/assets/modules_cannon/mf_empty.png" alt=""/>
+      <img src="/assets/modules_cannon/mf_common.png" alt=""/>
+      <img src="/assets/modules_armor/mf_empty.png" alt=""/>
+      <img src="/assets/modules_cannon/mf_ancestral.png" alt=""/>
+      <img src="/assets/modules_cannon/epic_hb.png" alt=""/>
+      <img src="/assets/modules_cannon/epic_dp.png" alt=""/>
+      <img src="/assets/modules_cannon/epic_ba.png" alt=""/>
+      <img src="/assets/modules_cannon/epic_ad.png" alt=""/>
+      <img src="/assets/modules_armor/mf_common.png" alt=""/>
+      <img src="/assets/modules_cannon/common_mc.png" alt=""/>
+      <img src="/assets/modules_armor/mf_ancestral.png" alt=""/>
+      <img src="/assets/modules_armor/epic_wr.png" alt=""/>
+  <img src="/assets/modules_armor/type.png" alt=""/>
+      <img src="/assets/modules_cannon/type.png" alt=""/>
+      <img src="/assets/modules_cannon/rare_sb.png" alt=""/>
+      <img src="/assets/modules_cannon/rare_rb.png" alt=""/>
+      <img src="/assets/modules_cannon/rare_ob.png" alt=""/>
+      <img src="/assets/modules_cannon/rare_bb.png" alt=""/>
+  <!-- Backgrounds preload -->
+  <img src="/assets/mine.png" alt=""/>
+  <img src="/assets/boss.png" alt=""/>
+  <img src="/assets/backgrounds/DarkBeing.png" alt=""/>
+  <img src="/assets/backgrounds/DarkStrands_channel.png" alt=""/>
+  <img src="/assets/backgrounds/DeepBlueSea_channel.png" alt=""/>
+  <img src="/assets/backgrounds/Autumn_channel.png" alt=""/>
+  <img src="/assets/backgrounds/AlienShip_channel.png" alt=""/>
+  <img src="/assets/backgrounds/Aurora_channel.png" alt=""/>
+  <img src="/assets/backgrounds/Virus_channel.png" alt=""/>
+  <img src="/assets/backgrounds/SunsetFishing_channel.png" alt=""/>
+  <img src="/assets/backgrounds/starNight.png" alt=""/>
+  <img src="/assets/backgrounds/SandsOfTme_channel.png" alt=""/>
+  <img src="/assets/backgrounds/Retrowave_channel.png" alt=""/>
+  <img src="/assets/backgrounds/RetroArcade_channel.png" alt=""/>
+  <img src="/assets/backgrounds/Rainfall_channel.png" alt=""/>
+  <img src="/assets/backgrounds/PrismaticLines_channel.png" alt=""/>
+  <img src="/assets/backgrounds/Plasma_channel.png" alt=""/>
+  <img src="/assets/backgrounds/perlin_noise.png" alt=""/>
+  <img src="/assets/backgrounds/OceanNight_channel.png" alt=""/>
+  <img src="/assets/backgrounds/NewYears_channel.png" alt=""/>
+  <img src="/assets/backgrounds/Nebula.png" alt=""/>
+  <img src="/assets/backgrounds/Matrix_channel.png" alt=""/>
+  <img src="/assets/backgrounds/Matrix2_channel.png" alt=""/>
+  <img src="/assets/backgrounds/MaskIrisReptile.png" alt=""/>
+  <img src="/assets/backgrounds/Invaders_channel.png" alt=""/>
+  <img src="/assets/backgrounds/IntoTheStorm_channel.png" alt=""/>
+  <img src="/assets/backgrounds/HowlingWolf_channel.png" alt=""/>
+  <img src="/assets/backgrounds/HowlingWolf2_channel.png" alt=""/>
+  <img src="/assets/backgrounds/Honeymask.png" alt=""/>
+  <img src="/assets/backgrounds/Honeycomb_channel.png" alt=""/>
+  <img src="/assets/backgrounds/Halloween_channel.png" alt=""/>
+  <img src="/assets/backgrounds/guildUpdateBanner.png" alt=""/>
+  <img src="/assets/backgrounds/golden_channel.png" alt=""/>
+  <img src="/assets/backgrounds/forest-of-cats.png" alt=""/>
+  <img src="/assets/backgrounds/FasterThanLight_channel.png" alt=""/>
+  <img src="/assets/backgrounds/Cthulhu.png" alt=""/>
+  <img src="/assets/backgrounds/Cobweb_channel.png" alt=""/>
+  <img src="/assets/backgrounds/clock-tower-space.png" alt=""/>
+  <img src="/assets/backgrounds/CherryBlossom_channel.png" alt=""/>
+  <img src="/assets/backgrounds/CherryBlossomTop.png" alt=""/>
+  <img src="/assets/backgrounds/blue-circuit.png" alt=""/>
+  <img src="/assets/backgrounds/Autumn_channel.png" alt=""/>
+    </div>
     <script type="module" src="/main.js"></script>
   </body>
 </html>

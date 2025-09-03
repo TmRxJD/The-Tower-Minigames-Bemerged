@@ -1,4 +1,112 @@
+/* Centered column for Bejeweled UI */
+.bejeweled-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  padding: 2rem 0;
+}
+
+/* Game board layout */
+#game-board {
+  display: grid;
+  grid-template-columns: repeat(8, 40px);
+  grid-gap: 6px;
+  margin-top: 20px;
+}
+
+/* Inventory styles (2x2 grid pinned to the right) */
+#inventory {
+  display: grid;
+  grid-template-columns: repeat(2, 96px);
+  grid-auto-rows: 96px;
+  gap: 8px;
+  font-size: 0.95rem;
+  /* keep overall pill font sizing but we'll control weights per label/value */
+  font-weight: 400;
+}
+
+/* Score and timer lines: labels normal weight, values bold. We'll render each line as a flex row
+   so label and value sit inline, but the overall pill will shrink to fit content. */
+#score .score-line,
+#score .time-line {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  justify-content: flex-start;
+  white-space: nowrap;
+}
+
+#score .score-label,
+#score .time-label {
+  font-weight: 400;
+  opacity: 0.95;
+}
+
+#score .score-value,
+#score .time-value {
+  font-weight: 700;
+}
+.inv-slot {
+  background: #0f0f0f; /* opaque background to prevent seeing page background through inventory slots */
+  border: 1px solid #444; /* default solid border to match board cells */
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* inner shape in inventory - scales to slot while preserving padding */
+.inv-shape {
+  width: 80%;
+  height: 80%;
+  box-sizing: border-box;
+  display: block;
+  margin: 0 auto;
+}
+
+.inv-slot .inv-initials {
+  bottom: 8px;
+  font-size: 13px !important;
+  padding: 3px 8px;
+}
+/* Bejeweled gem styles and animations */
+.gem {
+  transition: transform 0.3s cubic-bezier(0.4, 2, 0.6, 1), opacity 0.3s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  position: relative;
+  z-index: 1;
+}
+.gem.red { background: #e74c3c; }
+.gem.blue { background: #3498db; }
+.gem.green { background: #2ecc40; }
+.gem.yellow { background: #f1c40f; }
+.gem.purple { background: #9b59b6; }
+.gem.orange { background: #e67e22; }
+
+.gem.falling {
+  animation: gem-fall 0.4s cubic-bezier(0.4, 2, 0.6, 1);
+}
+
+@keyframes gem-fall {
+  0% { transform: translateY(-60px); opacity: 0.5; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+.gem.clearing {
+  animation: gem-clear 0.3s cubic-bezier(0.4, 2, 0.6, 1);
+}
+
+@keyframes gem-clear {
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.3); }
+}
 :root {
+  /* How many board-rows the right column should be nudged up. Tweak to move inventory/dev tools vertically. */
+  --rightcol-rows: 3;
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -11,6 +119,9 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Global animation speed multiplier. 1 = normal. JS will update this when slider changes. */
+  --anim-speed: 1;
+
 }
 
 a {
@@ -40,6 +151,55 @@ h1 {
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+}
+
+/* Layout: place merge chart to the left of the board when present */
+#app {
+  display: flex;
+  flex-direction: row;
+  align-items: center; /* center children vertically */
+  gap: 16px;
+  text-align: left; /* prefer left-aligned content inside the app when chart is present */
+}
+
+#merge-chart-wrap {
+  flex: 0 0 320px; /* fixed column on the left */
+  width: 320px;
+  max-width: 40vw;
+  align-self: center; /* vertically center the chart next to the board */
+  /* nudge chart down by two board rows (row height 64px + gap 6px) */
+  margin-top: calc((64px + 6px) * 2);
+}
+
+#merge-chart-wrap img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+}
+
+/* Ensure the main game column can grow and sits to the right of the chart */
+.bejeweled-container {
+  flex: 1 1 auto;
+  margin: 0; /* remove centered auto-margin when inside a row layout */
+}
+
+/* Right column that contains inventory and the debug/dev tools */
+#right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center; /* center inventory horizontally */
+  justify-content: center; /* center the whole column vertically relative to the board */
+  width: 220px; /* reasonable fixed width for inventory + console */
+  /* nudge the whole right column up by the configured number of board rows
+    (row height 64px + gap 6px). Controlled by --rightcol-rows. */
+  transform: translateY(calc((64px + 6px) * calc(-1 * var(--rightcol-rows))));
+  transition: transform 180ms ease;
+}
+
+#inventory {
+  align-self: center;
 }
 
 .logo {
@@ -85,4 +245,342 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+/* Merge-puzzle specific styles */
+.module-cell {
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+}
+.module-shape {
+  transition: box-shadow 150ms ease, transform 120ms ease;
+}
+/* Asset image layers: frame and module artwork */
+.module-frame {
+  display: block;
+}
+.module-asset {
+  display: block;
+}
+.module-shape img {
+  pointer-events: none;
+}
+.vector-mini, .vector-shape {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Selection visuals */
+.module-cell.selected-base {
+  outline: 3px solid #fff;
+  transform: scale(1.06);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+}
+.module-cell.selected-fodder {
+  outline: 4px solid rgba(255,255,255,0.95);
+  outline-offset: -6px;
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.45);
+}
+
+.module-cell.candidate {
+  /* Stronger light-blue target ring for candidate fodder tiles */
+  box-shadow: 0 0 0 3px rgba(173,216,230,0.18) inset, 0 6px 18px rgba(173,216,230,0.06), 0 0 0 4px rgba(173,216,230,0.22);
+  transition: box-shadow 160ms ease, transform 120ms ease;
+  position: relative;
+}
+.module-cell.candidate::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 10px;
+  box-shadow: 0 0 0 2px rgba(173,216,230,0.28) inset, 0 0 10px rgba(173,216,230,0.22);
+  pointer-events: none;
+  opacity: 0.98;
+}
+.module-cell {
+  transition: transform 120ms ease, box-shadow 120ms ease, outline 120ms ease;
+}
+
+/* Rare+ decorative notches and glow */
+.module-cell.rare-plus .module-shape {
+  box-shadow: 0 0 14px rgba(173,216,230,0.28), 0 4px 10px rgba(173,216,230,0.08);
+}
+.rare-plus-notch {
+  position: absolute;
+  width: 8px;
+  height: 4px;
+  background: rgba(255,255,255,0.95); /* bright white notches for contrast */
+  border-radius: 2px;
+  opacity: 0.98;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.6));
+}
+.rare-plus .notch-top { top: 4px; left: 50%; transform: translateX(-50%); }
+.rare-plus .notch-bottom { bottom: 4px; left: 50%; transform: translateX(-50%); }
+.rare-plus .notch-left { left: 4px; top: 50%; transform: translateY(-50%) rotate(90deg); }
+.rare-plus .notch-right { right: 4px; top: 50%; transform: translateY(-50%) rotate(90deg); }
+
+/* Numeric badge that shows selection order */
+.selection-badge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: rgba(0,0,0,0.85);
+  color: #fff;
+  font-weight: 800;
+  font-size: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+  z-index: 10;
+}
+
+/* stronger base outline color to distinguish from fodder */
+.module-cell.selected-base {
+  outline-color: #ffd966; /* warm gold */
+}
+
+/* Animations for cascade steps */
+.module-cell.falling {
+  /* faster fall step for snappier cascades */
+  animation: fall-step calc(80ms / var(--anim-speed)) linear forwards;
+}
+.module-cell.spawning {
+  /* quicker pop-in when new tiles spawn */
+  animation: pop-in calc(120ms / var(--anim-speed)) ease-out forwards;
+}
+.module-cell.clearing {
+  /* faster clear fade so removals feel responsive */
+  animation: clear-fade calc(160ms / var(--anim-speed)) ease-in forwards;
+}
+
+@keyframes fall-step {
+  0% { transform: translateY(-18px); opacity: 0.95; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+@keyframes pop-in {
+  0% { transform: scale(0.6); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes clear-fade {
+  0% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(0.6); opacity: 0; }
+}
+
+#game-info {
+  color: #ddd;
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+}
+
+/* Add space between the board and the control row to avoid overlap */
+#game-controls {
+  margin-top: 12px;
+}
+
+/* keep legacy gem styles (harmless) */
+
+/* Improve readability for module initials */
+.module-initials {
+  font-weight: 800;
+  color: #fff;
+  pointer-events: none;
+  z-index: 5;
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(0,0,0,0.6);
+  transform: translateY(-2px);
+
+}
+
+/* Visual treatment for tiles that are disabled due to an adjacent live mine.
+   Keeps interactivity but makes them visibly muted so players understand they
+   cannot be used as fodder or merged while adjacent to a mine. */
+.module-cell.disabled-by-mine .module-shape {
+  opacity: 0.62;
+  filter: grayscale(66%) contrast(0.9) saturate(0.8);
+  transition: filter 140ms ease, opacity 140ms ease;
+}
+
+.module-cell.disabled-by-mine::after {
+  /* subtle warning dot in the corner to indicate disabled state */
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  right: 6px;
+  bottom: 6px;
+  border-radius: 50%;
+  background: rgba(255,165,0,0.95); /* amber dot */
+  box-shadow: 0 1px 4px rgba(0,0,0,0.45);
+  z-index: 12;
+}
+
+/* Inventory slot text styling: force black text with white stroke to override inline colors */
+.inv-slot > div {
+  font-weight: 800 !important;
+}
+
+/* inventory overlay initials */
+.inv-initials {
+  position: absolute;
+  z-index: 6;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(0,0,0,0.7);
+  color: #fff !important;
+  font-size: 14px !important;
+}
+
+/* Make inventory placeholders more visible */
+.inv-slot > div[style] { /* targets the placeholder div and inner content too */
+  font-size: 18px !important;
+}
+
+/* Merge preview overlay: 4-slot preview anchored above the board */
+#merge-preview {
+  position: absolute;
+  top: -72px; /* placed above the board with extra gap to avoid overlap */
+  right: 0;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  pointer-events: none;
+  z-index: 30;
+}
+.merge-slot {
+  /* default to ~90% of a 64px tile; JS will override inline when possible */
+  width: 65px;
+  height: 65px;
+  background: #0f0f0f;
+  border: 1px solid #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  border-radius: 6px;
+}
+
+.merge-slot .preview-label {
+  font-size: 11px;
+  margin-top: 4px;
+  color: #fff;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* label positioned above each preview slot */
+.merge-slot > .preview-label {
+  background: rgba(0,0,0,0.6);
+  padding: 2px 6px;
+  border-radius: 6px;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  position: absolute;
+  font-size: 10px;
+  color: #e6eef6;
+}
+
+/* predicted result slot gets a gold border and subtle glow to stand out */
+.predicted-slot {
+  border: 2px solid #ffd966;
+  box-shadow: 0 4px 14px rgba(255,217,102,0.12);
+}
+
+/* plus separator between merge slots */
+.merge-plus {
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 20px;
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+  margin: 0 4px;
+  opacity: 0.95;
+}
+
+/* equals separator before the predicted result */
+.merge-equals {
+  color: #ffd966; /* warm gold to indicate result */
+  font-weight: 900;
+  font-size: 20px;
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+  margin: 0 4px;
+  opacity: 0.98;
+}
+
+/* Ensure score aligns left for readability and game info text is high-contrast */
+#game-info {
+  display: block;
+  width: auto;
+  text-align: left;
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 400;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.6);
+  z-index: 40;
+  margin-bottom: 6px;
+}
+
+#score {
+  /* make the score pill shrink to fit its contents */
+  display: inline-block;
+  text-align: left;
+  color: #ffffff; /* strong white for contrast on dark background */
+  font-size: 0.95rem;
+  font-weight: 400; /* weights for labels/values controlled by children */
+  text-shadow: 0 1px 0 rgba(0,0,0,0.6);
+  z-index: 40;
+  background: rgba(0,0,0,0.55);
+  padding: 6px 10px;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  align-self: flex-start; /* ensure pill anchors to the left of the column, not centered */
+  margin-left: 0; /* prevent any auto-centering margin */
+}
+
+/* Inline shards inside the main score pill */
+.shards-inline { display: inline-flex; align-items: center; gap: 8px; }
+.shard-item img { width: 36px; height: 36px; border-radius: 4px; }
+.shard-item { color: #fff; display: inline-flex; align-items: center; gap: 8px; }
+.shards-inline { gap: 12px; }
+
+/* Mine badge: center overlay showing moves remaining; high-contrast and legible */
+.mine-shape { position: relative; }
+.mine-shape .mine-badge {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0,0,0,0.82);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 900;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.6), 0 2px 6px rgba(0,0,0,0.4) inset;
+  z-index: 12;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.6);
+  pointer-events: none;
+}
+
+/* Slightly reduce size on very small tiles to avoid overflow */
+@media (max-width: 420px) {
+  .mine-shape .mine-badge { font-size: 12px; padding: 4px 8px; }
 }
