@@ -6,7 +6,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:3001',
+        target: 'http://localhost:3002',
         changeOrigin: true,
         secure: false,
         ws: true,
@@ -18,8 +18,7 @@ export default defineConfig({
       allowedHosts: [
         "localhost",
         "127.0.0.1",
-        "306dbfbc872d.ngrok-free.app", // new ngrok domain
-        "clicking-therapeutic-ultimately-endorsed.trycloudflare.com",
+        "webcast-participating-oregon-gulf.trycloudflare.com",
       ],
   },
 });
