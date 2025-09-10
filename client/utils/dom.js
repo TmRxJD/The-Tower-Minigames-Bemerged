@@ -3,7 +3,9 @@ export function createEl(tag = 'div', props = {}, styles = {}) {
   const el = document.createElement(tag);
   if (props && typeof props === 'object') {
     for (const k of Object.keys(props)) {
-      try { el[k] = props[k]; } catch (e) {}
+      try {
+        el[k] = props[k];
+      } catch (e) {}
     }
   }
   setStyle(el, styles);
@@ -11,8 +13,12 @@ export function createEl(tag = 'div', props = {}, styles = {}) {
 }
 
 export function setStyle(el, styles = {}) {
-  if (!el || !styles) return;
+  if (!el || !styles) {
+    return;
+  }
   for (const k of Object.keys(styles)) {
-    try { el.style[k] = styles[k]; } catch (e) {}
+    try {
+      el.style[k] = styles[k];
+    } catch (e) {}
   }
 }

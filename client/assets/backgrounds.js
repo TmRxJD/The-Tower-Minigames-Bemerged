@@ -88,22 +88,54 @@ export { formatBackgroundDisplay };
 export function applyBackground(key) {
   try {
     if (!key) {
-      document.body.style.backgroundImage = '';
+      const html = document.documentElement;
+      const body = document.body;
+      html.style.backgroundImage = '';
+      html.style.backgroundSize = '';
+      html.style.backgroundPosition = '';
+      html.style.backgroundRepeat = '';
+      html.style.backgroundAttachment = '';
+      html.style.backgroundColor = '';
+      html.style.height = '';
+      html.style.minHeight = '';
+      body.style.height = '';
+      body.style.minHeight = '';
       return;
     }
     const url = BACKGROUNDS[key];
     if (!url) {
-      document.body.style.backgroundImage = '';
+      const html = document.documentElement;
+      const body = document.body;
+      html.style.backgroundImage = '';
+      html.style.backgroundSize = '';
+      html.style.backgroundPosition = '';
+      html.style.backgroundRepeat = '';
+      html.style.backgroundAttachment = '';
+      html.style.backgroundColor = '';
+      html.style.height = '';
+      html.style.minHeight = '';
+      body.style.height = '';
+      body.style.minHeight = '';
       return;
     }
     const html = document.documentElement;
+    const body = document.body;
+
+    // Ensure html and body take full viewport height
+    html.style.height = '100%';
+    html.style.minHeight = '100vh';
+    body.style.height = '100%';
+    body.style.minHeight = '100vh';
+
     html.style.backgroundImage = `url("${url}")`;
     html.style.backgroundSize = 'cover';
     html.style.backgroundPosition = 'center center';
     html.style.backgroundRepeat = 'no-repeat';
     html.style.backgroundAttachment = 'fixed';
     html.style.backgroundColor = '#000';
-    try { localStorage.setItem('background', key); } catch (e) {}
+    try {
+      localStorage.setItem('background', key);
+    } catch (e) {}
   } catch (e) {}
 }
 

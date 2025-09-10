@@ -87,6 +87,76 @@ The client will be available at the port specified in your Vite config
 - `assets/` — Game images, modules, backgrounds
 - `helpers/` — Game logic helpers (e.g., boss logic)
 
-## Discord Integration
+## Code Quality & Linting
 
-The game uses the Discord Embedded App SDK for authentication and Activity integration. You must register a Discord application and set the client ID/secret in your `.env` file.
+This project uses ESLint and Prettier to maintain code quality and consistency.
+
+### Available Scripts
+
+From the root directory:
+
+```sh
+# Lint all workspaces (client and server)
+npm run lint
+
+# Fix linting issues automatically
+npm run lint:fix
+
+# Format code with Prettier
+npm run format
+
+# Check if code is properly formatted
+npm run format:check
+```
+
+From individual workspaces:
+
+```sh
+# Client
+cd client
+npm run lint
+npm run lint:fix
+npm run format
+npm run format:check
+
+# Server
+cd server
+npm run lint
+npm run lint:fix
+npm run format
+npm run format:check
+```
+
+### Linting Rules
+
+The project follows these coding standards:
+- **ESLint**: JavaScript code quality and style
+- **Prettier**: Code formatting consistency
+- **EditorConfig**: Consistent editor settings
+
+### Key Rules
+- 2-space indentation
+- Single quotes for strings
+- Semicolons always required
+- Trailing commas in multi-line structures
+- Maximum line length: 120 characters
+- Consistent spacing and formatting
+
+### IDE Integration
+
+Most modern editors support ESLint and Prettier automatically. Make sure to:
+1. Install the ESLint and Prettier extensions
+2. Configure your editor to format on save
+3. The `.editorconfig` file ensures consistent settings across different editors
+
+### Pre-commit Hooks (Optional)
+
+Consider setting up pre-commit hooks to automatically lint and format code before commits:
+
+```sh
+# Install husky and lint-staged
+npm install --save-dev husky lint-staged
+
+# Set up pre-commit hook
+npx husky add .husky/pre-commit "npm run lint:fix && npm run format"
+```

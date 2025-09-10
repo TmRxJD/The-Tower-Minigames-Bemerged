@@ -1,6 +1,8 @@
 // Small formatting helpers consolidated for reuse across the client
 export function formatBackgroundDisplay(name) {
-  if (!name) return 'None';
+  if (!name) {
+    return 'None';
+  }
   // remove common suffix _channel (case-insensitive)
   let s = String(name).replace(/_channel$/i, '');
   // insert spaces for camelCase (DarkBeing -> Dark Being)
@@ -21,21 +23,35 @@ export function formatTimer(seconds) {
   const YEAR = 365 * DAY; // approximate
 
   let rem = s;
-  const years = Math.floor(rem / YEAR); rem -= years * YEAR;
-  const months = Math.floor(rem / MONTH); rem -= months * MONTH;
-  const weeks = Math.floor(rem / WEEK); rem -= weeks * WEEK;
-  const days = Math.floor(rem / DAY); rem -= days * DAY;
-  const hours = Math.floor(rem / HOUR); rem -= hours * HOUR;
-  const minutes = Math.floor(rem / MIN); rem -= minutes * MIN;
+  const years = Math.floor(rem / YEAR);
+  rem -= years * YEAR;
+  const months = Math.floor(rem / MONTH);
+  rem -= months * MONTH;
+  const weeks = Math.floor(rem / WEEK);
+  rem -= weeks * WEEK;
+  const days = Math.floor(rem / DAY);
+  rem -= days * DAY;
+  const hours = Math.floor(rem / HOUR);
+  rem -= hours * HOUR;
+  const minutes = Math.floor(rem / MIN);
+  rem -= minutes * MIN;
   const secondsLeft = rem;
 
   const prefix = [];
-  if (years) prefix.push(years + 'Y');
-  if (months) prefix.push(months + 'M');
-  if (weeks) prefix.push(weeks + 'W');
-  if (days) prefix.push(days + 'D');
+  if (years) {
+    prefix.push(years + 'Y');
+  }
+  if (months) {
+    prefix.push(months + 'M');
+  }
+  if (weeks) {
+    prefix.push(weeks + 'W');
+  }
+  if (days) {
+    prefix.push(days + 'D');
+  }
 
-  const pad = (n) => String(n).padStart(2, '0');
+  const pad = n => String(n).padStart(2, '0');
   let timePart;
   if (hours > 0) {
     timePart = `${hours}:${pad(minutes)}:${pad(secondsLeft)}`;
@@ -43,6 +59,8 @@ export function formatTimer(seconds) {
     timePart = `${minutes}:${pad(secondsLeft)}`;
   }
 
-  if (prefix.length > 0) return prefix.join(' ') + ' ' + timePart;
+  if (prefix.length > 0) {
+    return prefix.join(' ') + ' ' + timePart;
+  }
   return timePart;
 }

@@ -204,7 +204,7 @@ export const ASSETS = {
     rare_rb: can_rare_rb,
     rare_ob: can_rare_ob,
     rare_bb: can_rare_bb,
-  }
+  },
 };
 
 export const TYPE_TOKENS = {

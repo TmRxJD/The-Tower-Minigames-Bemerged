@@ -11,16 +11,22 @@ let _embedded = false;
 let _initPromise = null;
 
 export async function initDiscordIfEmbedded() {
-  if (typeof window === 'undefined') return false;
-  if (_initPromise) return _initPromise;
+  if (typeof window === 'undefined') {
+    return false;
+  }
+  if (_initPromise) {
+    return _initPromise;
+  }
 
-  _initPromise = (async () => {
+  _initPromise = (async() => {
     try {
       // Attempt to dynamically import the SDK. If the import or initialization fails,
       // treat the environment as non-embedded and resolve gracefully.
       const mod = await import('@discord/embedded-app-sdk');
       const DiscordSDK = mod && mod.DiscordSDK ? mod.DiscordSDK : null;
-      if (!DiscordSDK) throw new Error('DiscordSDK not found in dynamic import');
+      if (!DiscordSDK) {
+        throw new Error('DiscordSDK not found in dynamic import');
+      }
 
       // Use Vite's import.meta.env when available; otherwise allow undefined client id.
       let clientId = undefined;
@@ -29,7 +35,11 @@ export async function initDiscordIfEmbedded() {
         clientId = import.meta && import.meta.env ? import.meta.env.VITE_DISCORD_CLIENT_ID : undefined;
       } catch (e) {
         // Fallback: allow an app to set a global if needed for testing in non-Vite environments
-        try { clientId = window && window.__VITE_DISCORD_CLIENT_ID__ ? window.__VITE_DISCORD_CLIENT_ID__ : undefined; } catch (ee) { clientId = undefined; }
+        try {
+          clientId = window && window.__VITE_DISCORD_CLIENT_ID__ ? window.__VITE_DISCORD_CLIENT_ID__ : undefined;
+        } catch (ee) {
+          clientId = undefined;
+        }
       }
 
       _sdk = new DiscordSDK(clientId);
@@ -61,7 +71,11 @@ export async function initDiscordIfEmbedded() {
       return true;
     } catch (err) {
       // Not embedded, or the SDK isn't available at runtime — reset state and return false.
-      try { _sdk = null; _auth = null; _embedded = false; } catch (e) {}
+      try {
+        _sdk = null;
+        _auth = null;
+        _embedded = false;
+      } catch (e) {}
       return false;
     }
   })();
@@ -70,22 +84,36 @@ export async function initDiscordIfEmbedded() {
 }
 
 export async function getChannelInfo() {
-  if (!_sdk) return null;
+  if (!_sdk) {
+    return null;
+  }
   try {
     // When the app is running in a GDM (no guildId) the DM scope may be required.
-    if (_sdk.channelId != null && _sdk.guildId != null) {
+    if (_sdk.channelId !== null && _sdk.guildId !== null) {
       const channel = await _sdk.commands.getChannel({ channel_id: _sdk.channelId });
-      return { channel, channelId: _sdk.channelId, guildId: _sdk.guildId, auth: _auth };
+      return { channel,
+        channelId: _sdk.channelId,
+        guildId: _sdk.guildId,
+        auth: _auth };
     }
     // If there's a channelId but no guildId (DM/GDM) attempt to fetch as well — may require extra scope.
-    if (_sdk.channelId != null) {
+    if (_sdk.channelId !== null) {
       try {
         const channel = await _sdk.commands.getChannel({ channel_id: _sdk.channelId });
-        return { channel, channelId: _sdk.channelId, guildId: _sdk.guildId, auth: _auth };
-      } catch (e) { /* ignore */ }
+        return { channel,
+          channelId: _sdk.channelId,
+          guildId: _sdk.guildId,
+          auth: _auth };
+      } catch (e) {
+        /* ignore */
+      }
     }
-  } catch (e) { /* ignore */ }
+  } catch (e) {
+    /* ignore */
+  }
   return null;
 }
 
-export function isEmbedded() { return !!_embedded; }
+export function isEmbedded() {
+  return !!_embedded;
+}
