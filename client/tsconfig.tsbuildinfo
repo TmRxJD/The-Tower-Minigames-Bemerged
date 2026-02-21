@@ -1,0 +1,1 @@
+{"root":["./standalone.ts","./vite.config.ts","./assets/backgrounds.ts","./assets/index.ts","./assets/manager.ts","./assets/modules_index.ts","./engine/gameengine.ts","./engine/match3scene.ts","./engine/board.ts","./engine/catalog.ts","./engine/moduledata.ts","./engine/paritytuning.ts","./engine/rng.ts","./engine/types.ts","./ui/hudcontroller.ts"],"version":"5.9.3"}

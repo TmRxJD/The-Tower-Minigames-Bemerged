@@ -1,0 +1,31 @@
+Cannons
+AD – Rare+ modules deal +1/2/3/4 extra hits to bosses
+DP – 1/2.5/5/7.5/10% chance to instantly kill the boss on spawn
+BA – Each module in a combo has 5/10/15/20% chance to deal 2× damage to bosses
+HB – Boss loses 1/2/3/4% max HP every 5 moves
+SR – Bosses spawn with 2.5/5/7.5/10% less HP
+AS – Boss takes +10/20/30/40% damage per combo
+
+Armors
+ACP – Auto‑shatter all common modules touching merges/combos; each shattered module adds +1 to boss combo
+SD – Mine spawn chance reduced by 5/10/15/20%; mines have 15% chance to explode with reduced radius
+NMP – Gain +3/5/7/9 extra moves before the boss begins destroying modules
+WR – Mines destroy 1/2/3/4 fewer surrounding modules
+SF – Boss takes +1/2/3/4 hits for each rare module destroyed in its blast
+OA – Rare modules adjacent to merges have 2/4/6/8% chance to promote to Rare+
+
+Generators
+BHD – 2/4/6/8% chance for a unique Epic to spawn as Epic+
+SH – 2/4/6/8% chance to gain 2× shards from shattered modules
+PH – Rare/Epic drop rate increases by ×1/1.5/2/2.5% each move while the boss is alive; resets on boss death
+GC – Each merge or shatter combo of 4+ reduces timer by 3/5/7/9s
+PF – Rare/Epic drop rate multiplied by log(1/2/3/4%) of total shards
+RB – 2/4/6/8% chance for one module destroyed by boss/mines to promote instead
+
+Cores
+OC – Modules adjacent to the boss have 10% chance to deal +2/3/4/5 extra hits in combos
+DC – Each boss combo stacks +1/2/3/4 times toward the next combo
+HC – 5/10/15/20% chance for boss/mines to miss one non-common module in their blast radius
+MVN – Auto‑shatter all common modules every 25/20/15/10 moves
+MH – Mines move toward the boss every 4/3/2/1 moves
+PC – Boss loses 2/3/4/5% max HP per rare module adjacent to it per combo

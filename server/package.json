@@ -2,13 +2,14 @@
   "name": "bemerged-server",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "server.ts",
   "type": "module",
   "scripts": {
-    "dev": "npm start",
-    "start": "node server.js",
-    "lint": "eslint . --ext .js,.mjs",
-    "lint:fix": "eslint . --ext .js,.mjs --fix",
+    "dev": "cross-env BEMERGED_DEV_PROXY=1 npm start",
+    "start": "tsx server.ts",
+    "lint": "eslint .",
+    "type-check": "tsc -p tsconfig.json --noEmit",
+    "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
@@ -16,12 +17,16 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "eslint": "^8.57.0",
-    "prettier": "^3.2.5"
+    "prettier": "^3.2.5",
+    "typescript": "^5.7.3",
+    "tsx": "^4.19.2",
+    "@types/node": "^22.13.4",
+    "@types/express": "^4.17.21"
   },
   "dependencies": {
-    "dotenv": "^16.4.1",
     "express": "^4.18.2",
-    "node-fetch": "^3.3.2"
+    "http-proxy-middleware": "^3.0.0"
   }
 }

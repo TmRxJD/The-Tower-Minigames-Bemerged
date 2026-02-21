@@ -6,16 +6,23 @@
     "server"
   ],
   "scripts": {
-    "lint": "npm run lint --workspaces",
-    "lint:fix": "npm run lint:fix --workspaces",
+    "dev:clean": "kill-port 3002 5173",
+    "lint": "pnpm -r lint",
+    "lint:fix": "pnpm -r lint:fix",
+    "type-check": "tsc -b",
     "format": "npm run format --workspaces",
     "format:check": "npm run format:check --workspaces",
-    "dev": "npm run dev --workspace=client",
+    "dev": "pnpm run dev:clean && pnpm -r --parallel --filter bemerged-client --filter bemerged-server dev",
     "build": "npm run build --workspace=client",
     "server": "npm run dev --workspace=server"
   },
   "devDependencies": {
+    "@stylistic/eslint-plugin": "^2.13.0",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
     "eslint": "^8.57.0",
-    "prettier": "^3.2.5"
+    "kill-port": "^2.0.1",
+    "prettier": "^3.2.5",
+    "typescript": "^5.7.3"
   }
 }
