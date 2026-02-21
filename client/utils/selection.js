@@ -8,7 +8,7 @@
  * @returns {boolean} True if the selection is from inventory
  */
 export function isInvSel(selection) {
-  return selection && typeof selection.inv !== 'undefined';
+  return selection && typeof selection.inv !== 'undefined'
 }
 
 /**
@@ -17,5 +17,5 @@ export function isInvSel(selection) {
  * @returns {boolean} True if the selection is from the board
  */
 export function isBoardSel(selection) {
-  return selection && typeof selection.r === 'number' && typeof selection.c === 'number';
+  return selection && typeof selection.r === 'number' && typeof selection.c === 'number'
 }

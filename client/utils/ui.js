@@ -1,17 +1,17 @@
 // utils/ui.js
 // UI management utilities
 
-import { makeScoreUI } from '../ui/score.js';
+import { makeScoreUI } from '../ui/score.js'
 
 // Create score UI factory instance
-let __scoreUI = null;
+let __scoreUI = null
 function getScoreUI() {
   if (!__scoreUI) {
     // We need to get the required context from main.js
     // This will be set up when the utility functions are called
-    throw new Error('Score UI not initialized. Call updateScoreUI or ensureGameTimerPlaced first.');
+    throw new Error('Score UI not initialized. Call updateScoreUI or ensureGameTimerPlaced first.')
   }
-  return __scoreUI;
+  return __scoreUI
 }
 
 /**
@@ -19,17 +19,17 @@ function getScoreUI() {
  */
 export function updateScoreUI() {
   try {
-    const scoreUI = getScoreUI();
-    return scoreUI.updateScoreUI();
+    const scoreUI = getScoreUI()
+    return scoreUI.updateScoreUI()
   } catch (e) {
     // Fallback behavior when score UI is not yet available
-    console.warn('Score UI not available, using fallback behavior');
+    console.warn('Score UI not available, using fallback behavior')
     // Keep original fallback behavior
-    const el = document.getElementById('score');
+    const el = document.getElementById('score')
     if (!el) {
-      return;
+      return
     }
-    el.textContent = String(window.score || 0);
+    el.textContent = String(window.score || 0)
   }
 }
 
@@ -38,21 +38,21 @@ export function updateScoreUI() {
  */
 export function ensureGameTimerPlaced() {
   try {
-    const scoreUI = getScoreUI();
-    return scoreUI.ensureGameTimerPlaced();
+    const scoreUI = getScoreUI()
+    return scoreUI.ensureGameTimerPlaced()
   } catch (e) {
     // Fallback behavior when score UI is not yet available
-    console.warn('Score UI not available, using fallback behavior');
-    const el = document.getElementById('game-timer');
+    console.warn('Score UI not available, using fallback behavior')
+    const el = document.getElementById('game-timer')
     if (el) {
       try {
-        el.textContent = String(window.gameTimerSeconds || 0);
-      } catch (e) {} // eslint-disable-line no-empty
+        el.textContent = String(window.gameTimerSeconds || 0)
+      } catch (e) {}
     }
   }
 }
 
 // Export a function to initialize the score UI factory
 export function initScoreUI(ctx) {
-  __scoreUI = makeScoreUI(ctx);
+  __scoreUI = makeScoreUI(ctx)
 }

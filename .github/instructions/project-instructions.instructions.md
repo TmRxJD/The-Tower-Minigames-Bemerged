@@ -69,6 +69,7 @@ tests/
 engine.spec.js — unit tests for engine.predictMergeResult, matcher functions
 matcher.spec.js
 cascade.spec.js
+
 Why this layout works for your goals
 
 Main remains the single runner & state owner: easier to inspect and debug.

@@ -80,7 +80,7 @@ export const MODULE_TEMPLATES = [
     type: 'Core',
     initials: 'MVN',
     unique: true },
-];
+]
 
 export const RARE_TEMPLATES = [
   { id: 'OB',
@@ -163,7 +163,7 @@ export const RARE_TEMPLATES = [
     type: 'Core',
     initials: 'CS',
     unique: false },
-];
+]
 
 export const COMMON_TEMPLATES = [
   { id: 'EC_C',
@@ -206,26 +206,26 @@ export const COMMON_TEMPLATES = [
     type: 'Core',
     initials: 'MC',
     unique: false },
-];
+]
 
 // Assign explicit allowed rarity ranges per template.
 MODULE_TEMPLATES.forEach(t => {
-  t.minRarity = 'Epic';
-  t.maxRarity = 'Epic';
-  t.unique = true;
-});
+  t.minRarity = 'Epic'
+  t.maxRarity = 'Epic'
+  t.unique = true
+})
 RARE_TEMPLATES.forEach(t => {
-  t.minRarity = 'Rare';
-  t.maxRarity = 'Rare';
-  t.unique = false;
-});
+  t.minRarity = 'Rare'
+  t.maxRarity = 'Rare'
+  t.unique = false
+})
 COMMON_TEMPLATES.forEach(t => {
-  t.minRarity = 'Common';
-  t.maxRarity = 'Common';
-  t.unique = false;
-});
+  t.minRarity = 'Common'
+  t.maxRarity = 'Common'
+  t.unique = false
+})
 
-export const ALL_TEMPLATES = MODULE_TEMPLATES.concat(RARE_TEMPLATES, COMMON_TEMPLATES);
+export const ALL_TEMPLATES = MODULE_TEMPLATES.concat(RARE_TEMPLATES, COMMON_TEMPLATES)
 
 // RARITY_RANK and BASE_RATES are canonicalized in ./rules.js — re-export them here for compatibility
-export { RARITY_RANK, BASE_RATES } from './rules.js';
+export { RARITY_RANK, BASE_RATES } from './rules.js'

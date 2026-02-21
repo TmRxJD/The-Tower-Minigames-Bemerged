@@ -8,20 +8,20 @@
  */
 export function makeMergeState({ appendToDebug }) {
   // Merge selection state variables
-  let selected = []; // selections (first is base)
-  let mergeSelecting = false; // true while user is in long-press merge selection mode
-  let mineShatterSelecting = false; // true while user is in mine shatter selection mode
-  let bossShatterSelecting = false; // true while user is in boss shatter selection mode
-  let invalidClickCount = 0; // tracks consecutive clicks outside valid areas to exit selection modes
-  let baseClickCount = 0; // tracks consecutive clicks on base to exit selection modes when requirements not met
-  let candidateHighlights = new Set(); // set of 'r,c' strings for auto-highlighted candidates
+  let selected = [] // selections (first is base)
+  let mergeSelecting = false // true while user is in long-press merge selection mode
+  let mineShatterSelecting = false // true while user is in mine shatter selection mode
+  let bossShatterSelecting = false // true while user is in boss shatter selection mode
+  let invalidClickCount = 0 // tracks consecutive clicks outside valid areas to exit selection modes
+  let baseClickCount = 0 // tracks consecutive clicks on base to exit selection modes when requirements not met
+  const candidateHighlights = new Set() // set of 'r,c' strings for auto-highlighted candidates
 
   /**
    * Get current selected modules
    * @returns {Array} Current selected modules
    */
   function getSelected() {
-    return selected;
+    return selected
   }
 
   /**
@@ -29,7 +29,7 @@ export function makeMergeState({ appendToDebug }) {
    * @param {Array} newSelected - New selected modules
    */
   function setSelected(newSelected) {
-    selected = newSelected;
+    selected = newSelected
   }
 
   /**
@@ -37,7 +37,7 @@ export function makeMergeState({ appendToDebug }) {
    * @param {Object} selection - Selection object with r, c, cell properties
    */
   function addToSelection(selection) {
-    selected.push(selection);
+    selected.push(selection)
   }
 
   /**
@@ -47,19 +47,19 @@ export function makeMergeState({ appendToDebug }) {
    * @returns {boolean} True if removed, false if not found
    */
   function removeFromSelection(r, c) {
-    const index = selected.findIndex(s => s.r === r && s.c === c);
+    const index = selected.findIndex(s => s.r === r && s.c === c)
     if (index >= 0) {
-      selected.splice(index, 1);
-      return true;
+      selected.splice(index, 1)
+      return true
     }
-    return false;
+    return false
   }
 
   /**
    * Clear all selections
    */
   function clearSelection() {
-    selected = [];
+    selected = []
   }
 
   /**
@@ -67,7 +67,7 @@ export function makeMergeState({ appendToDebug }) {
    * @returns {boolean} Whether in merge selection mode
    */
   function getMergeSelecting() {
-    return mergeSelecting;
+    return mergeSelecting
   }
 
   /**
@@ -75,7 +75,7 @@ export function makeMergeState({ appendToDebug }) {
    * @param {boolean} value - New merge selecting state
    */
   function setMergeSelecting(value) {
-    mergeSelecting = value;
+    mergeSelecting = value
   }
 
   /**
@@ -83,7 +83,7 @@ export function makeMergeState({ appendToDebug }) {
    * @returns {boolean} Whether in mine shatter selection mode
    */
   function getMineShatterSelecting() {
-    return mineShatterSelecting;
+    return mineShatterSelecting
   }
 
   /**
@@ -91,7 +91,7 @@ export function makeMergeState({ appendToDebug }) {
    * @param {boolean} value - New mine shatter selecting state
    */
   function setMineShatterSelecting(value) {
-    mineShatterSelecting = value;
+    mineShatterSelecting = value
   }
 
   /**
@@ -99,7 +99,7 @@ export function makeMergeState({ appendToDebug }) {
    * @returns {boolean} Whether in boss shatter selection mode
    */
   function getBossShatterSelecting() {
-    return bossShatterSelecting;
+    return bossShatterSelecting
   }
 
   /**
@@ -107,7 +107,7 @@ export function makeMergeState({ appendToDebug }) {
    * @param {boolean} value - New boss shatter selecting state
    */
   function setBossShatterSelecting(value) {
-    bossShatterSelecting = value;
+    bossShatterSelecting = value
   }
 
   /**
@@ -115,7 +115,7 @@ export function makeMergeState({ appendToDebug }) {
    * @returns {number} Current invalid click count
    */
   function getInvalidClickCount() {
-    return invalidClickCount;
+    return invalidClickCount
   }
 
   /**
@@ -123,21 +123,21 @@ export function makeMergeState({ appendToDebug }) {
    * @param {number} value - New invalid click count
    */
   function setInvalidClickCount(value) {
-    invalidClickCount = value;
+    invalidClickCount = value
   }
 
   /**
    * Increment invalid click count
    */
   function incrementInvalidClickCount() {
-    invalidClickCount++;
+    invalidClickCount++
   }
 
   /**
    * Reset invalid click count
    */
   function resetInvalidClickCount() {
-    invalidClickCount = 0;
+    invalidClickCount = 0
   }
 
   /**
@@ -145,7 +145,7 @@ export function makeMergeState({ appendToDebug }) {
    * @returns {number} Current base click count
    */
   function getBaseClickCount() {
-    return baseClickCount;
+    return baseClickCount
   }
 
   /**
@@ -153,21 +153,21 @@ export function makeMergeState({ appendToDebug }) {
    * @param {number} value - New base click count
    */
   function setBaseClickCount(value) {
-    baseClickCount = value;
+    baseClickCount = value
   }
 
   /**
    * Increment base click count
    */
   function incrementBaseClickCount() {
-    baseClickCount++;
+    baseClickCount++
   }
 
   /**
    * Reset base click count
    */
   function resetBaseClickCount() {
-    baseClickCount = 0;
+    baseClickCount = 0
   }
 
   /**
@@ -175,7 +175,7 @@ export function makeMergeState({ appendToDebug }) {
    * @returns {Set} Current candidate highlights
    */
   function getCandidateHighlights() {
-    return candidateHighlights;
+    return candidateHighlights
   }
 
   /**
@@ -184,7 +184,7 @@ export function makeMergeState({ appendToDebug }) {
    * @param {number} c - Column
    */
   function addCandidateHighlight(r, c) {
-    candidateHighlights.add(`${r},${c}`);
+    candidateHighlights.add(`${r},${c}`)
   }
 
   /**
@@ -193,14 +193,14 @@ export function makeMergeState({ appendToDebug }) {
    * @param {number} c - Column
    */
   function removeCandidateHighlight(r, c) {
-    candidateHighlights.delete(`${r},${c}`);
+    candidateHighlights.delete(`${r},${c}`)
   }
 
   /**
    * Clear all candidate highlights
    */
   function clearCandidateHighlights() {
-    candidateHighlights.clear();
+    candidateHighlights.clear()
   }
 
   /**
@@ -208,10 +208,10 @@ export function makeMergeState({ appendToDebug }) {
    * @param {Array} positions - Array of {r,c} positions
    */
   function setCandidateHighlights(positions) {
-    candidateHighlights.clear();
+    candidateHighlights.clear()
     positions.forEach(pos => {
-      candidateHighlights.add(`${pos.r},${pos.c}`);
-    });
+      candidateHighlights.add(`${pos.r},${pos.c}`)
+    })
   }
 
   /**
@@ -221,7 +221,7 @@ export function makeMergeState({ appendToDebug }) {
    * @returns {boolean} Whether position is highlighted
    */
   function isCandidateHighlighted(r, c) {
-    return candidateHighlights.has(`${r},${c}`);
+    return candidateHighlights.has(`${r},${c}`)
   }
 
   /**
@@ -229,20 +229,20 @@ export function makeMergeState({ appendToDebug }) {
    * @returns {boolean} Whether any selection mode is active
    */
   function isAnySelectionModeActive() {
-    return mergeSelecting || mineShatterSelecting || bossShatterSelecting;
+    return mergeSelecting || mineShatterSelecting || bossShatterSelecting
   }
 
   /**
    * Exit all selection modes and clear state
    */
   function exitAllSelectionModes() {
-    mergeSelecting = false;
-    mineShatterSelecting = false;
-    bossShatterSelecting = false;
-    selected = [];
-    candidateHighlights.clear();
-    invalidClickCount = 0;
-    baseClickCount = 0;
+    mergeSelecting = false
+    mineShatterSelecting = false
+    bossShatterSelecting = false
+    selected = []
+    candidateHighlights.clear()
+    invalidClickCount = 0
+    baseClickCount = 0
   }
 
   /**
@@ -258,7 +258,7 @@ export function makeMergeState({ appendToDebug }) {
       invalidClickCount,
       baseClickCount,
       candidateHighlightsCount: candidateHighlights.size,
-    };
+    }
   }
 
   return {
@@ -295,5 +295,5 @@ export function makeMergeState({ appendToDebug }) {
     incrementBaseClickCount,
     resetBaseClickCount,
     exitAllSelectionModes,
-  };
+  }
 }

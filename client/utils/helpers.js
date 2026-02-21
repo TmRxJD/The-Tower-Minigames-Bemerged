@@ -1,8 +1,6 @@
 // utils/helpers.js
 // Miscellaneous utility functions
 
-import { getChannelInfo } from '../integrations/discord.js';
-
 /**
  * Creates a simple hash of the board state to detect changes
  * @param {Array} board - The game board array
@@ -14,9 +12,9 @@ export function getBoardStateHash(board) {
       .map(row =>
         row.map(cell => (cell ? `${cell.templateId}_${cell.rarity}_${!!cell.plus}_${cell.type}` : 'empty')).join('|'),
       )
-      .join('||');
+      .join('||')
   } catch (e) {
-    return null;
+    return null
   }
 }
 
@@ -25,10 +23,10 @@ export function getBoardStateHash(board) {
  */
 export function ensureHintStyles() {
   if (document.getElementById('hint-styles')) {
-    return;
+    return
   }
-  const s = document.createElement('style');
-  s.id = 'hint-styles';
+  const s = document.createElement('style')
+  s.id = 'hint-styles'
   s.textContent = `
   .hint-pulse {
     animation: hintPulse 1.2s ease-in-out infinite;
@@ -57,31 +55,31 @@ export function ensureHintStyles() {
   }
   .inv-shape { width:46px; height:46px; display:flex; align-items:center; justify-content:center; }
   .rare-plus-notch { box-shadow: 0 0 8px rgba(255,255,255,0.08); }
-  `;
-  document.head.appendChild(s);
+  `
+  document.head.appendChild(s)
 }
 
 /**
  * Appends the current voice channel name to the UI
  */
 export async function appendVoiceChannelName() {
-  const app = document.querySelector('#app');
+  const app = document.querySelector('#app')
 
-  let activityChannelName = 'Unknown';
+  let activityChannelName = 'Unknown'
 
   // Use integration helper which is a no-op when not embedded or when SDK unavailable
   try {
-    const info = await getChannelInfo();
+    const info = await getChannelInfo()
     if (info && info.channel && info.channel.name) {
-      activityChannelName = info.channel.name;
+      activityChannelName = info.channel.name
     }
   } catch (e) {
     /* ignore */
   }
 
   // Update the UI with the name of the current voice channel
-  const textTagString = `Activity Channel: "${activityChannelName}"`;
-  const textTag = document.createElement('p');
-  textTag.textContent = textTagString;
-  app.appendChild(textTag);
+  const textTagString = `Activity Channel: "${activityChannelName}"`
+  const textTag = document.createElement('p')
+  textTag.textContent = textTagString
+  app.appendChild(textTag)
 }

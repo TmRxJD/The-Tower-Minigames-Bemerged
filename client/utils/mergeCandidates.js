@@ -20,33 +20,33 @@ export function makeMergeCandidates({ ALL_TEMPLATES, canBeFodder, appendToDebug,
    * @returns {Array} Array of {r,c} positions
    */
   function findPotentialFodder(br, bc, board, mineShatterSelecting = false) {
-    const base = board[br] && board[br][bc];
+    const base = board[br] && board[br][bc]
     if (!base) {
-      return [];
+      return []
     }
-    const out = [];
+    const out = []
     // scan neighbors (and entire board for matching templates in some cases)
     for (let r = 0; r < BOARD_ROWS; r++) {
       for (let c = 0; c < BOARD_COLS; c++) {
         if (r === br && c === bc) {
-          continue;
+          continue
         }
-        const cell = board[r][c];
+        const cell = board[r][c]
         if (!cell) {
-          continue;
+          continue
         }
         // Exclude mines when in regular merge mode (not mine shatter mode)
         if (!mineShatterSelecting && (cell.templateId === '__MINE__' || cell.rarity === 'Mine')) {
-          continue;
+          continue
         }
         // No adjacency requirement: consider entire board
         if (canBeFodder(base, cell)) {
           out.push({ r,
-            c });
+            c })
         }
       }
     }
-    return out;
+    return out
   }
 
   /**
@@ -57,7 +57,7 @@ export function makeMergeCandidates({ ALL_TEMPLATES, canBeFodder, appendToDebug,
    * @returns {Array} Array of {r,c} positions
    */
   function findMineShatterCandidates(mineR, mineC, board) {
-    const out = [];
+    const out = []
 
     // Check for 5-tile patterns with mine in center
     const patterns = [
@@ -100,26 +100,26 @@ export function makeMergeCandidates({ ALL_TEMPLATES, canBeFodder, appendToDebug,
         { r: mineR,
           c: mineC - 1 },
       ],
-    ];
+    ]
 
     for (const pattern of patterns) {
       // Check if all positions are within bounds
       const validPositions = pattern.filter(
         pos => pos.r >= 0 && pos.r < BOARD_ROWS && pos.c >= 0 && pos.c < BOARD_COLS,
-      );
+      )
 
       if (validPositions.length === 5) {
         // Get cells for all positions
         const positionsWithCells = validPositions.map(pos => ({
           ...pos,
           cell: board[pos.r] && board[pos.r][pos.c],
-        }));
+        }))
 
         // Find mine position and module positions
-        const minePos = positionsWithCells.find(p => p.r === mineR && p.c === mineC);
+        const minePos = positionsWithCells.find(p => p.r === mineR && p.c === mineC)
         const modulePositions = positionsWithCells.filter(
           p => p.cell && p.cell.templateId !== '__MINE__' && p.cell.rarity !== 'Mine',
-        );
+        )
 
         // Must have exactly 1 mine (the center) and 4 modules
         if (
@@ -129,27 +129,27 @@ export function makeMergeCandidates({ ALL_TEMPLATES, canBeFodder, appendToDebug,
           modulePositions.length === 4
         ) {
           // Check if all 4 modules would be valid fodder for some base
-          let validFodder = false;
-          const mod1 = modulePositions[0].cell;
-          const mod2 = modulePositions[1].cell;
-          const mod3 = modulePositions[2].cell;
-          const mod4 = modulePositions[3].cell;
+          let validFodder = false
+          const mod1 = modulePositions[0].cell
+          const mod2 = modulePositions[1].cell
+          const mod3 = modulePositions[2].cell
+          const mod4 = modulePositions[3].cell
 
           // Simplified validation: just check that all modules are the same type
           // Allow Commons (like the 3-tile logic does)
-          const allSameType = mod1.type === mod2.type && mod2.type === mod3.type && mod3.type === mod4.type;
+          const allSameType = mod1.type === mod2.type && mod2.type === mod3.type && mod3.type === mod4.type
 
           if (allSameType) {
-            validFodder = true;
+            validFodder = true
           }
 
           if (validFodder) {
             modulePositions.forEach(pos => {
               if (!out.find(existing => existing.r === pos.r && existing.c === pos.c)) {
                 out.push({ r: pos.r,
-                  c: pos.c });
+                  c: pos.c })
               }
-            });
+            })
           }
         }
       }
@@ -158,9 +158,9 @@ export function makeMergeCandidates({ ALL_TEMPLATES, canBeFodder, appendToDebug,
     // Also keep the original 3-tile logic for backward compatibility
     // Check horizontal lines where mine can be in any position in the 3-in-a-row
     for (let offset = -2; offset <= 0; offset++) {
-      const c1 = mineC + offset;
-      const c2 = mineC + offset + 1;
-      const c3 = mineC + offset + 2;
+      const c1 = mineC + offset
+      const c2 = mineC + offset + 1
+      const c3 = mineC + offset + 2
       if (c1 >= 0 && c2 >= 0 && c3 >= 0 && c1 < BOARD_COLS && c2 < BOARD_COLS && c3 < BOARD_COLS) {
         // Find which positions have modules (not mines)
         const positions = [
@@ -173,25 +173,25 @@ export function makeMergeCandidates({ ALL_TEMPLATES, canBeFodder, appendToDebug,
           { r: mineR,
             c: c3,
             cell: board[mineR] && board[mineR][c3] },
-        ];
+        ]
 
         const mineCount = positions.filter(
           p => p.cell && (p.cell.templateId === '__MINE__' || p.cell.rarity === 'Mine'),
-        ).length;
+        ).length
         const modulePositions = positions.filter(
           p => p.cell && p.cell.templateId !== '__MINE__' && p.cell.rarity !== 'Mine',
-        );
+        )
 
         // If exactly one mine and two modules, check if they would be valid fodder for mine destruction
         if (mineCount === 1 && modulePositions.length === 2) {
-          const mod1 = modulePositions[0].cell;
-          const mod2 = modulePositions[1].cell;
+          const mod1 = modulePositions[0].cell
+          const mod2 = modulePositions[1].cell
 
           // Special case: allow 2 commons of the same type
-          const validCommons = mod1.rarity === 'Common' && mod2.rarity === 'Common' && mod1.type === mod2.type;
+          const validCommons = mod1.rarity === 'Common' && mod2.rarity === 'Common' && mod1.type === mod2.type
 
           // Check if they would be valid fodder for some base according to normal merge rules
-          let validFodder = false;
+          let validFodder = false
 
           // Try different hypothetical bases to see if these 2 modules would be valid fodder
           const hypotheticalBases = [
@@ -231,13 +231,13 @@ export function makeMergeCandidates({ ALL_TEMPLATES, canBeFodder, appendToDebug,
               plus: false,
               type: mod1.type,
               templateId: mod1.templateId },
-          ];
+          ]
 
           for (const base of hypotheticalBases) {
             // Check if both modules would be valid fodder for this base
             if (canBeFodder(base, mod1) && canBeFodder(base, mod2)) {
-              validFodder = true;
-              break;
+              validFodder = true
+              break
             }
           }
 
@@ -245,9 +245,9 @@ export function makeMergeCandidates({ ALL_TEMPLATES, canBeFodder, appendToDebug,
             modulePositions.forEach(pos => {
               if (!out.find(existing => existing.r === pos.r && existing.c === pos.c)) {
                 out.push({ r: pos.r,
-                  c: pos.c });
+                  c: pos.c })
               }
-            });
+            })
           }
         }
       }
@@ -255,9 +255,9 @@ export function makeMergeCandidates({ ALL_TEMPLATES, canBeFodder, appendToDebug,
 
     // Check vertical lines where mine can be in any position in the 3-in-a-row
     for (let offset = -2; offset <= 0; offset++) {
-      const r1 = mineR + offset;
-      const r2 = mineR + offset + 1;
-      const r3 = mineR + offset + 2;
+      const r1 = mineR + offset
+      const r2 = mineR + offset + 1
+      const r3 = mineR + offset + 2
       if (r1 >= 0 && r2 >= 0 && r3 >= 0 && r1 < BOARD_ROWS && r2 < BOARD_ROWS && r3 < BOARD_ROWS) {
         // Find which positions have modules (not mines)
         const positions = [
@@ -270,25 +270,25 @@ export function makeMergeCandidates({ ALL_TEMPLATES, canBeFodder, appendToDebug,
           { r: r3,
             c: mineC,
             cell: board[r3] && board[r3][mineC] },
-        ];
+        ]
 
         const mineCount = positions.filter(
           p => p.cell && (p.cell.templateId === '__MINE__' || p.cell.rarity === 'Mine'),
-        ).length;
+        ).length
         const modulePositions = positions.filter(
           p => p.cell && p.cell.templateId !== '__MINE__' && p.cell.rarity !== 'Mine',
-        );
+        )
 
         // If exactly one mine and two modules, check if they would be valid fodder for mine destruction
         if (mineCount === 1 && modulePositions.length === 2) {
-          const mod1 = modulePositions[0].cell;
-          const mod2 = modulePositions[1].cell;
+          const mod1 = modulePositions[0].cell
+          const mod2 = modulePositions[1].cell
 
           // Special case: allow 2 commons of the same type
-          const validCommons = mod1.rarity === 'Common' && mod2.rarity === 'Common' && mod1.type === mod2.type;
+          const validCommons = mod1.rarity === 'Common' && mod2.rarity === 'Common' && mod1.type === mod2.type
 
           // Check if they would be valid fodder for some base according to normal merge rules
-          let validFodder = false;
+          let validFodder = false
 
           // Try different hypothetical bases to see if these 2 modules would be valid fodder
           const hypotheticalBases = [
@@ -328,13 +328,13 @@ export function makeMergeCandidates({ ALL_TEMPLATES, canBeFodder, appendToDebug,
               plus: false,
               type: mod1.type,
               templateId: mod1.templateId },
-          ];
+          ]
 
           for (const base of hypotheticalBases) {
             // Check if both modules would be valid fodder for this base
             if (canBeFodder(base, mod1) && canBeFodder(base, mod2)) {
-              validFodder = true;
-              break;
+              validFodder = true
+              break
             }
           }
 
@@ -342,15 +342,15 @@ export function makeMergeCandidates({ ALL_TEMPLATES, canBeFodder, appendToDebug,
             modulePositions.forEach(pos => {
               if (!out.find(existing => existing.r === pos.r && existing.c === pos.c)) {
                 out.push({ r: pos.r,
-                  c: pos.c });
+                  c: pos.c })
               }
-            });
+            })
           }
         }
       }
     }
 
-    return out;
+    return out
   }
 
   /**
@@ -362,7 +362,7 @@ export function makeMergeCandidates({ ALL_TEMPLATES, canBeFodder, appendToDebug,
    * @returns {Array} Array of {r,c} positions
    */
   function findBossShatterCandidates(bossR, bossC, board, selectedModules = []) {
-    const out = [];
+    const out = []
     appendToDebug &&
       appendToDebug(
         'findBossShatterCandidates called at (' +
@@ -372,7 +372,7 @@ export function makeMergeCandidates({ ALL_TEMPLATES, canBeFodder, appendToDebug,
           ') with ' +
           selectedModules.length +
           ' selected',
-      );
+      )
 
     if (selectedModules.length === 0) {
       // No selection yet, highlight only the 4 adjacent squares to the boss
@@ -385,17 +385,17 @@ export function makeMergeCandidates({ ALL_TEMPLATES, canBeFodder, appendToDebug,
           c: bossC - 1 }, // left
         { r: bossR,
           c: bossC + 1 }, // right
-      ];
+      ]
 
       const validAdjacent = adjacentPositions.filter(
         pos => pos.r >= 0 && pos.r < BOARD_ROWS && pos.c >= 0 && pos.c < BOARD_COLS,
-      );
+      )
 
       for (const pos of validAdjacent) {
-        const cell = board[pos.r] && board[pos.r][pos.c];
+        const cell = board[pos.r] && board[pos.r][pos.c]
         if (cell && cell.templateId !== '__BOSS__' && cell.rarity !== 'Boss') {
           out.push({ r: pos.r,
-            c: pos.c });
+            c: pos.c })
         }
       }
     } else {
@@ -409,58 +409,58 @@ export function makeMergeCandidates({ ALL_TEMPLATES, canBeFodder, appendToDebug,
           c: bossC - 1 }, // left
         { r: bossR,
           c: bossC + 1 }, // right
-      ];
+      ]
 
       const validAdjacent = adjacentPositions.filter(
         pos => pos.r >= 0 && pos.r < BOARD_ROWS && pos.c >= 0 && pos.c < BOARD_COLS,
-      );
+      )
 
       for (const pos of validAdjacent) {
-        const cell = board[pos.r] && board[pos.r][pos.c];
+        const cell = board[pos.r] && board[pos.r][pos.c]
         if (cell && cell.templateId !== '__BOSS__' && cell.rarity !== 'Boss') {
           // Check if not already selected
-          const alreadySelected = selectedModules.some(sel => sel.r === pos.r && sel.c === pos.c);
+          const alreadySelected = selectedModules.some(sel => sel.r === pos.r && sel.c === pos.c)
           if (!alreadySelected) {
             out.push({ r: pos.r,
-              c: pos.c });
+              c: pos.c })
           }
         }
       }
 
       // Group selected modules by type and rarity to handle multiple chains
-      const chains = {};
+      const chains = {}
       selectedModules.forEach((sel, index) => {
         if (!sel.cell) {
-          return;
+          return
         }
-        const baseRarity = sel.cell.rarity.replace(/\+/g, '');
-        const requiresExactTemplate = ['Rare', 'Epic'].includes(baseRarity);
+        const baseRarity = sel.cell.rarity.replace(/\+/g, '')
+        const requiresExactTemplate = ['Rare', 'Epic'].includes(baseRarity)
         const key = requiresExactTemplate
           ? sel.cell.type + '_' + sel.cell.rarity + '_' + sel.cell.templateId
-          : sel.cell.type + '_' + sel.cell.rarity;
+          : sel.cell.type + '_' + sel.cell.rarity
         if (!chains[key]) {
           chains[key] = { modules: [],
-            lastIndex: -1 };
+            lastIndex: -1 }
         }
         chains[key].modules.push({ ...sel,
-          index });
+          index })
         if (index > chains[key].lastIndex) {
-          chains[key].lastIndex = index;
+          chains[key].lastIndex = index
         }
-      });
+      })
 
       // For each chain, highlight adjacent modules from all selected in that chain
       Object.values(chains).forEach(chain => {
-        const targetType = chain.modules[0].cell.type;
-        const targetRarity = chain.modules[0].cell.rarity;
-        const targetTemplateId = chain.modules[0].cell.templateId;
+        const targetType = chain.modules[0].cell.type
+        const targetRarity = chain.modules[0].cell.rarity
+        const targetTemplateId = chain.modules[0].cell.templateId
 
         // Determine if we need exact template match based on rarity
-        const requiresExactTemplate = ['Rare', 'Epic'].includes(targetRarity.replace(/\+/g, ''));
+        const requiresExactTemplate = ['Rare', 'Epic'].includes(targetRarity.replace(/\+/g, ''))
 
         // Collect all positions to check for adjacent highlights
         const positionsToCheck = chain.modules.map(m => ({ r: m.r,
-          c: m.c }));
+          c: m.c }))
 
         positionsToCheck.forEach(pos => {
           const adjacentPositions = [
@@ -472,14 +472,14 @@ export function makeMergeCandidates({ ALL_TEMPLATES, canBeFodder, appendToDebug,
               c: pos.c - 1 }, // left
             { r: pos.r,
               c: pos.c + 1 }, // right
-          ];
+          ]
 
           const validAdjacent = adjacentPositions.filter(
             adj => adj.r >= 0 && adj.r < BOARD_ROWS && adj.c >= 0 && adj.c < BOARD_COLS,
-          );
+          )
 
           for (const adj of validAdjacent) {
-            const cell = board[adj.r] && board[adj.r][adj.c];
+            const cell = board[adj.r] && board[adj.r][adj.c]
             if (
               cell &&
               cell.templateId !== '__BOSS__' &&
@@ -489,27 +489,27 @@ export function makeMergeCandidates({ ALL_TEMPLATES, canBeFodder, appendToDebug,
             ) {
               // Additional check for exact template match if required
               if (requiresExactTemplate && cell.templateId !== targetTemplateId) {
-                continue;
+                continue
               }
               // Check if not already selected
-              const alreadySelected = selectedModules.some(sel => sel.r === adj.r && sel.c === adj.c);
+              const alreadySelected = selectedModules.some(sel => sel.r === adj.r && sel.c === adj.c)
               if (!alreadySelected) {
                 out.push({ r: adj.r,
-                  c: adj.c });
+                  c: adj.c })
               }
             }
           }
-        });
-      });
+        })
+      })
     }
 
-    appendToDebug && appendToDebug('Total candidates found: ' + out.length);
-    return out;
+    appendToDebug && appendToDebug('Total candidates found: ' + out.length)
+    return out
   }
 
   return {
     findPotentialFodder,
     findMineShatterCandidates,
     findBossShatterCandidates,
-  };
+  }
 }
